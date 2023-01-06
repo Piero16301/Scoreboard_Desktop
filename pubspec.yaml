@@ -1,0 +1,54 @@
+name: scoreboard_desktop
+description: Football and basketball scoreboard for Windows, MacOS and Linux.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: 3.3.8
+
+dependencies:
+  bloc: ^8.1.0
+  equatable: ^2.0.5
+  fluent_ui: ^4.1.3
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.1
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
+  window_manager: ^0.2.9
+
+dev_dependencies:
+  bloc_test: ^9.1.0
+  flutter_launcher_icons: ^0.11.0
+  flutter_test:
+    sdk: flutter
+  mocktail: ^0.3.0
+  very_good_analysis: ^3.1.0
+
+assets:
+  - assets/
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+flutter_icons:
+  android: false
+  ios: false
+  image_path: "assets/logo.png"
+  web:
+    generate: false
+  windows:
+    generate: true
+    image_path: "assets/logo.png"
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: "assets/logo.png"
+    icon_size: 256
+  linux:
+    generate: true
+    image_path: "assets/logo.png"
+    icon_size: 256
