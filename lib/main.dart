@@ -9,11 +9,12 @@ void main() async {
   await windowManager.ensureInitialized();
 
   const windowOptions = WindowOptions(
-    size: Size(400, 400),
+    size: Size(400, 215),
     center: true,
     // backgroundColor: Colors.transparent,
-    titleBarStyle: TitleBarStyle.normal,
+    titleBarStyle: TitleBarStyle.hidden,
     alwaysOnTop: true,
+    minimumSize: Size(400, 215),
     // skipTaskbar: true,
   );
   await windowManager.waitUntilReadyToShow(windowOptions, () async {
