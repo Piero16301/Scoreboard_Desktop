@@ -9,7 +9,7 @@ void main() async {
   await windowManager.ensureInitialized();
 
   const windowOptions = WindowOptions(
-    size: Size(400, 200),
+    size: Size(400, 400),
     center: true,
     // backgroundColor: Colors.transparent,
     titleBarStyle: TitleBarStyle.normal,

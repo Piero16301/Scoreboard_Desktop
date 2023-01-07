@@ -10,14 +10,15 @@ class HomeView extends StatelessWidget {
     context.read<HomeCubit>().initialLoading();
 
     return Container(
-      padding: const EdgeInsets.all(10),
-      color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      color: const Color.fromRGBO(32, 32, 32, 100),
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           if (state.status.isLoading) {
             return const Center(child: ProgressRing());
           } else if (state.status.isSuccess) {
             return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Center(
                 child: Column(
                   children: List<MatchCard>.generate(
@@ -42,37 +43,40 @@ class MatchCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      borderRadius: BorderRadius.circular(10),
-      child: Column(
-        children: [
-          const Text('Match 1'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
-                children: [
-                  Image.network(
-                    'https://crests.football-data.org/61.png',
-                    fit: BoxFit.cover,
-                    height: 70,
-                    width: 70,
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Image.network(
-                    'https://crests.football-data.org/65.png',
-                    fit: BoxFit.cover,
-                    height: 70,
-                    width: 70,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Card(
+        borderRadius: BorderRadius.circular(10),
+        child: Column(
+          children: [
+            const Text('Premier League'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  children: [
+                    Image.network(
+                      'https://crests.football-data.org/61.png',
+                      fit: BoxFit.cover,
+                      height: 70,
+                      width: 70,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Image.network(
+                      'https://crests.football-data.org/65.png',
+                      fit: BoxFit.cover,
+                      height: 70,
+                      width: 70,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

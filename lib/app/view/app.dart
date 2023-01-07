@@ -7,11 +7,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const FluentApp(
+    return FluentApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: HomePage(),
+      theme: ThemeData.dark(),
+      home: const HomePage(),
     );
   }
 }
