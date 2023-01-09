@@ -1,0 +1,9 @@
+export 'area.dart';
+export 'competition.dart';
+export 'match.dart';
+export 'odds.dart';
+export 'referee.dart';
+export 'score.dart';
+export 'season.dart';
+export 'team.dart';
+export 'time.dart';

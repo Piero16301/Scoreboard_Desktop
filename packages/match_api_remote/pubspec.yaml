@@ -1,0 +1,19 @@
+name: match_api_remote
+description: Match API remote connection
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ">=2.18.0 <3.0.0"
+
+dependencies:
+  dio: ^4.0.6
+  flutter:
+    sdk: flutter
+  match_api:
+    path: ../match_api
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^3.1.0

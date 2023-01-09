@@ -1,16 +1,54 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scoreboard_desktop/home/home.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    context.read<HomeCubit>().initialLoading();
+  State<HomeView> createState() => _HomeViewState();
+}
 
+class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
+  late StreamSubscription<void> _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
+    context.read<HomeCubit>().initialMatchesLoading();
+
+    _subscription = Stream<void>.periodic(
+      const Duration(seconds: 20),
+    ).listen(
+      (_) => context.read<HomeCubit>().updateMatches(),
+    );
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _subscription.resume();
+    } else {
+      if (!_subscription.isPaused) _subscription.pause();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 7.5),
       color: const Color.fromRGBO(32, 32, 32, 100),
@@ -19,53 +57,42 @@ class HomeView extends StatelessWidget {
           if (state.status.isLoading) {
             return const Center(child: ProgressRing());
           } else if (state.status.isSuccess) {
+            if (state.matches.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No hay partidos para hoy',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              );
+            }
+
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Center(
                 child: Column(
-                  children: const [
-                    MatchCard(
-                      competitionName: 'La Liga',
-                      competitionLogo:
-                          'https://crests.football-data.org/PD.png',
-                      homeTeamName: 'Real Madrid CF',
-                      homeTeamLogo: 'https://crests.football-data.org/86.png',
-                      homeTeamScore: '0',
-                      awayTeamName: 'FC Barcelona',
-                      awayTeamLogo: 'https://crests.football-data.org/81.svg',
-                      awayTeamScore: '4',
-                      matchTime: '90+5',
-                    ),
-                    MatchCard(
-                      competitionName: 'Premier League',
-                      competitionLogo:
-                          'https://crests.football-data.org/PL.png',
-                      homeTeamName: 'Manchester City FC',
-                      homeTeamLogo: 'https://crests.football-data.org/65.png',
-                      homeTeamScore: '3',
-                      awayTeamName: 'Liverpool FC',
-                      awayTeamLogo: 'https://crests.football-data.org/64.png',
-                      awayTeamScore: '2',
-                      matchTime: '90+3',
-                    ),
-                    MatchCard(
-                      competitionName: 'Seria A',
-                      competitionLogo:
-                          'https://crests.football-data.org/SA.png',
-                      homeTeamName: 'Juventus FC',
-                      homeTeamLogo: 'https://crests.football-data.org/109.svg',
-                      homeTeamScore: '2',
-                      awayTeamName: 'FC Internazionale Milano',
-                      awayTeamLogo: 'https://crests.football-data.org/108.png',
-                      awayTeamScore: '4',
-                      matchTime: '90+6',
-                    ),
-                  ],
+                  children: state.matches
+                      .map(
+                        (match) => MatchCard(
+                          competitionName: match.competition.name,
+                          competitionLogo: match.competition.emblem,
+                          homeTeamName: match.homeTeam.name,
+                          homeTeamLogo: match.homeTeam.crest,
+                          homeTeamScore: match.score.fullTime.home.toString(),
+                          awayTeamName: match.awayTeam.name,
+                          awayTeamLogo: match.awayTeam.crest,
+                          awayTeamScore: match.score.fullTime.away.toString(),
+                          matchTime: 'FT',
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             );
           } else if (state.status.isFailure) {
-            return Center(child: Text(state.message));
+            // return Center(child: Text(state.message));
           }
           return const SizedBox.shrink();
         },
@@ -183,7 +210,7 @@ class TeamBlock extends StatelessWidget {
             logoUrl: teamLogo,
             height: 70,
             width: 70,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
           const SizedBox(height: 5),
           SizedBox(
@@ -280,15 +307,6 @@ class TeamLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (logoUrl.endsWith('.svg')) {
-      if (logoUrl.contains('109')) {
-        return SvgPicture.network(
-          logoUrl,
-          fit: fit,
-          height: height,
-          width: width,
-          color: Colors.white,
-        );
-      }
       return SvgPicture.network(
         logoUrl,
         fit: fit,

@@ -15,25 +15,25 @@ enum HomeStatus {
 class HomeState extends Equatable {
   const HomeState({
     this.status = HomeStatus.initial,
-    this.message = '',
+    this.matches = const <Match>[],
   });
 
   final HomeStatus status;
-  final String message;
+  final List<Match> matches;
 
   HomeState copyWith({
     HomeStatus? status,
-    String? message,
+    List<Match>? matches,
   }) {
     return HomeState(
       status: status ?? this.status,
-      message: message ?? this.message,
+      matches: matches ?? this.matches,
     );
   }
 
   @override
   List<Object> get props => [
         status,
-        message,
+        matches,
       ];
 }
