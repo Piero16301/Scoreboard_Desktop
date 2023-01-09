@@ -8,7 +8,7 @@ part of 'time.dart';
 
 Time _$TimeFromJson(Map<String, dynamic> json) {
   return Time(
-    home: json['home'] as int,
-    away: json['away'] as int,
+    home: json['home'] != null ? json['home'] as int : 0,
+    away: json['away'] != null ? json['away'] as int : 0,
   );
 }

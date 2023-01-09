@@ -15,9 +15,9 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(status: HomeStatus.loading));
     try {
       final params = {
-        'competitions': 'EC',
-        'dateFrom': '2021-06-26',
-        'dateTo': '2021-06-30',
+        'competitions': 'CL,PL,PD,SA,FL1,BL1',
+        'dateFrom': getDateFormatted(fromDate: true),
+        'dateTo': getDateFormatted(fromDate: false),
       };
       final matches = await _matchRepository.getMatchesOfTheDay(params);
       emit(
@@ -34,9 +34,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> updateMatches() async {
     try {
       final params = {
-        'competitions': 'EC',
-        'dateFrom': '2021-06-26',
-        'dateTo': '2021-06-30',
+        'competitions': 'CL,PL,PD,SA,FL1,BL1',
+        'dateFrom': getDateFormatted(fromDate: true),
+        'dateTo': getDateFormatted(fromDate: false),
       };
       final matches = await _matchRepository.getMatchesOfTheDay(params);
       emit(
@@ -44,8 +44,21 @@ class HomeCubit extends Cubit<HomeState> {
           matches: matches,
         ),
       );
+      debugPrint('Matches updated');
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  String getDateFormatted({required bool fromDate}) {
+    if (fromDate) {
+      final date = DateTime.now();
+      return '${date.year}-${date.month.toString().padLeft(2, '0')}-'
+          '${date.day.toString().padLeft(2, '0')}';
+    } else {
+      final date = DateTime.now().add(const Duration(days: 1));
+      return '${date.year}-${date.month.toString().padLeft(2, '0')}-'
+          '${date.day.toString().padLeft(2, '0')}';
     }
   }
 }

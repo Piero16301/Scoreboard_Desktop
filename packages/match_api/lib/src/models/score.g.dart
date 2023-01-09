@@ -8,7 +8,7 @@ part of 'score.dart';
 
 Score _$ScoreFromJson(Map<String, dynamic> json) {
   return Score(
-    winner: json['winner'] as String,
+    winner: json['winner'] != null ? json['winner'] as String : null,
     duration: json['duration'] as String,
     fullTime: Time.fromJson(json['fullTime'] as Map<String, dynamic>),
     halfTime: Time.fromJson(json['halfTime'] as Map<String, dynamic>),

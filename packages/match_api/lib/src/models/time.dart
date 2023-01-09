@@ -18,10 +18,10 @@ class Time extends Equatable {
   factory Time.fromJson(Map<String, dynamic> json) => _$TimeFromJson(json);
 
   /// Goles del equipo local
-  final int home;
+  final int? home;
 
   /// Goles del equipo visitante
-  final int away;
+  final int? away;
 
   @override
   List<Object?> get props => [

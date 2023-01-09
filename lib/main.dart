@@ -13,13 +13,13 @@ void main() async {
 
   // Establecer propiedades de la ventana
   const windowOptions = WindowOptions(
-    size: Size(400, 215),
+    size: Size(400, 216),
     center: true,
     // backgroundColor: Colors.transparent,
     titleBarStyle: TitleBarStyle.hidden,
     alwaysOnTop: true,
-    minimumSize: Size(400, 215),
-    // skipTaskbar: true,
+    minimumSize: Size(400, 216),
+    skipTaskbar: true,
   );
 
   // Establecer posición de la ventana
@@ -36,8 +36,8 @@ void main() async {
       headers: {
         'X-Auth-Token': '7fc3c7ecb0744a85b5cfe0c6e8e8dcd9',
       },
-      connectTimeout: 5000,
-      receiveTimeout: 5000,
+      connectTimeout: 10000,
+      receiveTimeout: 10000,
     ),
   );
 

@@ -58,38 +58,62 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
             return const Center(child: ProgressRing());
           } else if (state.status.isSuccess) {
             if (state.matches.isEmpty) {
-              return const Center(
-                child: Text(
-                  'No hay partidos para hoy',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
+              return Stack(
+                children: const [
+                  Center(
+                    child: Text(
+                      'No hay partidos para hoy',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               );
             }
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Center(
-                child: Column(
-                  children: state.matches
-                      .map(
-                        (match) => MatchCard(
-                          competitionName: match.competition.name,
-                          competitionLogo: match.competition.emblem,
-                          homeTeamName: match.homeTeam.name,
-                          homeTeamLogo: match.homeTeam.crest,
-                          homeTeamScore: match.score.fullTime.home.toString(),
-                          awayTeamName: match.awayTeam.name,
-                          awayTeamLogo: match.awayTeam.crest,
-                          awayTeamScore: match.score.fullTime.away.toString(),
-                          matchTime: 'FT',
-                        ),
-                      )
-                      .toList(),
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Center(
+                    child: Column(
+                      children: state.matches
+                          .map(
+                            (match) => MatchCard(
+                              competitionName: match.competition.name,
+                              competitionLogo: match.competition.emblem,
+                              homeTeamName: match.homeTeam.name,
+                              homeTeamLogo: match.homeTeam.crest,
+                              homeTeamScore:
+                                  match.score.fullTime.home.toString(),
+                              awayTeamName: match.awayTeam.name,
+                              awayTeamLogo: match.awayTeam.crest,
+                              awayTeamScore:
+                                  match.score.fullTime.away.toString(),
+                              matchTime: getMatchState(match.status),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 0,
+                  left: 7,
+                  child: SizedBox.square(
+                    dimension: 20,
+                    child: IconButton(
+                      icon: const Icon(
+                        FluentIcons.settings,
+                        size: 20,
+                      ),
+                      onPressed: () => debugPrint('Settings'),
+                    ),
+                  ),
+                ),
+              ],
             );
           } else if (state.status.isFailure) {
             // return Center(child: Text(state.message));
@@ -98,6 +122,40 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
         },
       ),
     );
+  }
+
+  String getMatchState(String status) {
+    switch (status) {
+      case 'SCHEDULED':
+        return 'Programado';
+      case 'TIMED':
+        return 'Programado';
+      case 'IN_PLAY':
+        return 'En vivo';
+      case 'PAUSED':
+        return 'Pausado';
+      case 'FINISHED':
+        return 'Finalizado';
+      case 'POSTPONED':
+        return 'Postergado';
+      case 'SUSPENDED':
+        return 'Suspendido';
+      case 'CANCELED':
+        return 'Cancelado';
+      case 'AWARDED':
+        return 'Otorgado';
+      default:
+        return 'Desconocido';
+    }
+  }
+}
+
+class SettingsButton extends StatelessWidget {
+  const SettingsButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
@@ -245,6 +303,8 @@ class MatchScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLiveMacth = matchTime == 'En vivo' || matchTime == 'Pausado';
+
     return SizedBox(
       height: 130,
       width: 70,
@@ -281,9 +341,16 @@ class MatchScore extends StatelessWidget {
           Text(
             matchTime,
             style: GoogleFonts.poppins(
-              fontSize: 14,
+              fontSize: 12,
             ),
+            textAlign: TextAlign.center,
           ),
+          if (isLiveMacth) const SizedBox(height: 5),
+          if (isLiveMacth)
+            const SizedBox(
+              width: 50,
+              child: ProgressBar(activeColor: Colors.white),
+            ),
         ],
       ),
     );
@@ -307,11 +374,15 @@ class TeamLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (logoUrl.endsWith('.svg')) {
-      return SvgPicture.network(
-        logoUrl,
-        fit: fit,
+      return SizedBox(
         height: height,
         width: width,
+        child: SvgPicture.network(
+          logoUrl,
+          fit: fit,
+          // height: height,
+          // width: width,
+        ),
       );
     } else {
       return Image.network(

@@ -21,7 +21,7 @@ class Score extends Equatable {
   factory Score.fromJson(Map<String, dynamic> json) => _$ScoreFromJson(json);
 
   /// Ganador del partido
-  final String winner;
+  final String? winner;
 
   /// Duración del partido
   final String duration;

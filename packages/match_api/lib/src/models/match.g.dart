@@ -18,7 +18,9 @@ Match _$MatchFromJson(Map<String, dynamic> json) {
     matchday: json['matchday'] as int,
     stage: json['stage'] as String,
     group: json['group'] as String? ?? '-',
-    lastUpdated: DateTime.parse(json['lastUpdated'] as String).toLocal(),
+    lastUpdated: DateTime.parse(json['lastUpdated'] as String)
+        .toLocal()
+        .subtract(const Duration(hours: 1)),
     homeTeam: Team.fromJson(json['homeTeam'] as Map<String, dynamic>),
     awayTeam: Team.fromJson(json['awayTeam'] as Map<String, dynamic>),
     score: Score.fromJson(json['score'] as Map<String, dynamic>),
