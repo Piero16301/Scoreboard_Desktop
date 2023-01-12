@@ -20,6 +20,7 @@ class HomeCubit extends Cubit<HomeState> {
         'dateTo': getDateFormatted(fromDate: false),
       };
       final matches = await _matchRepository.getMatchesOfTheDay(params);
+      matches.sort((a, b) => a.id.compareTo(b.id) * -1);
       emit(
         state.copyWith(
           status: HomeStatus.success,
@@ -39,6 +40,7 @@ class HomeCubit extends Cubit<HomeState> {
         'dateTo': getDateFormatted(fromDate: false),
       };
       final matches = await _matchRepository.getMatchesOfTheDay(params);
+      matches.sort((a, b) => a.id.compareTo(b.id) * -1);
       emit(
         state.copyWith(
           matches: matches,

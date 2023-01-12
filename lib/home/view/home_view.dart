@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:scoreboard_desktop/home/home.dart';
 
 class HomeView extends StatefulWidget {
@@ -92,7 +93,10 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                               awayTeamLogo: match.awayTeam.crest,
                               awayTeamScore:
                                   match.score.fullTime.away.toString(),
-                              matchTime: getMatchState(match.status),
+                              matchTime: getMatchState(
+                                match.status,
+                                match.utcDate,
+                              ),
                             ),
                           )
                           .toList(),
@@ -124,12 +128,12 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
     );
   }
 
-  String getMatchState(String status) {
+  String getMatchState(String status, DateTime date) {
     switch (status) {
       case 'SCHEDULED':
-        return 'Programado';
+        return DateFormat('hh:mm a').format(date);
       case 'TIMED':
-        return 'Programado';
+        return DateFormat('hh:mm a').format(date);
       case 'IN_PLAY':
         return 'En vivo';
       case 'PAUSED':

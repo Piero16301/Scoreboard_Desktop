@@ -18,14 +18,22 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_svg: ^1.1.6
+  go_router: ^6.0.1
   google_fonts: ^3.0.1
   intl: ^0.17.0
+  local_api:
+    path: packages/local_api
+  local_api_remote:
+    path: packages/local_api_remote
+  local_repository:
+    path: packages/local_repository
   match_api:
     path: packages/match_api
   match_api_remote:
     path: packages/match_api_remote
   match_repository:
     path: packages/match_repository
+  shared_preferences: ^2.0.15
   window_manager: ^0.2.9
 
 dev_dependencies:
