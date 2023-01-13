@@ -15,4 +15,9 @@ class MatchRepository {
   Future<List<Match>> getMatchesOfTheDay(Map<String, dynamic> params) async {
     return _apiRemote.getMatchesOfTheDay(params);
   }
+
+  /// Obtiene las ligas disponibles en el plan
+  Future<List<League>> getAvailableLeagues() async {
+    return _apiRemote.getAvailableLeagues();
+  }
 }

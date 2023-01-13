@@ -1,5 +1,6 @@
 export 'area.dart';
 export 'competition.dart';
+export 'league.dart';
 export 'match.dart';
 export 'odds.dart';
 export 'referee.dart';

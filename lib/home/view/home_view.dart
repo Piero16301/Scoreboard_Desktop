@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:scoreboard_desktop/home/home.dart';
@@ -107,13 +108,13 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                   top: 0,
                   left: 7,
                   child: SizedBox.square(
-                    dimension: 20,
+                    dimension: 40,
                     child: IconButton(
                       icon: const Icon(
                         FluentIcons.settings,
                         size: 20,
                       ),
-                      onPressed: () => debugPrint('Settings'),
+                      onPressed: () => context.push('/settings'),
                     ),
                   ),
                 ),

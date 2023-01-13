@@ -41,4 +41,32 @@ class MatchApiRemote implements IMatchApiRemote {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<List<League>> getAvailableLeagues() async {
+    try {
+      final response = await _httpClient.get<Map<String, dynamic>>(
+        '/v4/competitions',
+      );
+
+      if (response.statusCode != 200) throw Exception();
+      if (response.data == null) throw Exception();
+      if (response.data?['competitions'] == null) return [];
+
+      final leaguesJson = response.data?['competitions'] as List<dynamic>;
+      final leagues = leaguesJson
+          .map(
+            (json) => League.fromJson(json as Map<String, dynamic>),
+          )
+          .toList();
+
+      return leagues;
+    } on DioError catch (e) {
+      debugPrint('Dio error: ${e.message}');
+      throw Exception(e);
+    } catch (e) {
+      debugPrint('Error: $e');
+      throw Exception(e);
+    }
+  }
 }

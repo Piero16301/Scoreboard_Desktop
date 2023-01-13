@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:scoreboard_desktop/home/home.dart';
+import 'package:scoreboard_desktop/settings/settings.dart';
 
 GoRouter goRouter() {
   return GoRouter(
@@ -9,10 +10,10 @@ GoRouter goRouter() {
         path: '/home',
         builder: (context, state) => const HomePage(),
       ),
-      // GoRoute(
-      //   path: '/settings',
-      //   builder: (context, state) => const SettingsPage(),
-      // ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsPage(),
+      ),
     ],
     debugLogDiagnostics: true,
   );

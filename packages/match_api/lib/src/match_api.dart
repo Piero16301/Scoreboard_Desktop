@@ -8,4 +8,7 @@ import 'package:match_api/match_api.dart';
 abstract class IMatchApiRemote {
   /// Obtiene los partidos del día
   Future<List<Match>> getMatchesOfTheDay(Map<String, dynamic> params);
+
+  /// Obtiene las ligas disponibles en el plan
+  Future<List<League>> getAvailableLeagues();
 }
