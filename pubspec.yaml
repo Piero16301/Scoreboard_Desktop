@@ -33,7 +33,7 @@ dependencies:
     path: packages/match_api_remote
   match_repository:
     path: packages/match_repository
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.0.16
   window_manager: ^0.2.9
 
 dev_dependencies:
