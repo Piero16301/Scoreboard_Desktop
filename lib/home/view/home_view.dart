@@ -61,13 +61,27 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
           } else if (state.status.isSuccess) {
             if (state.matches.isEmpty) {
               return Stack(
-                children: const [
-                  Center(
+                children: [
+                  const Center(
                     child: Text(
                       'No hay partidos para hoy',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 7,
+                    child: SizedBox.square(
+                      dimension: 40,
+                      child: IconButton(
+                        icon: const Icon(
+                          FluentIcons.settings,
+                          size: 20,
+                        ),
+                        onPressed: () => context.go('/settings'),
                       ),
                     ),
                   ),
@@ -81,26 +95,33 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Center(
                     child: Column(
-                      children: state.matches
-                          .map(
-                            (match) => MatchCard(
-                              competitionName: match.competition.name,
-                              competitionLogo: match.competition.emblem,
-                              homeTeamName: match.homeTeam.name,
-                              homeTeamLogo: match.homeTeam.crest,
-                              homeTeamScore:
-                                  match.score.fullTime.home.toString(),
-                              awayTeamName: match.awayTeam.name,
-                              awayTeamLogo: match.awayTeam.crest,
-                              awayTeamScore:
-                                  match.score.fullTime.away.toString(),
-                              matchTime: getMatchState(
-                                match.status,
-                                match.utcDate,
-                              ),
+                      children: [
+                        // const SizedBox(height: 10),
+                        // Text(
+                        //   'Partidos de hoy',
+                        //   style: GoogleFonts.poppins(
+                        //     fontSize: 16,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 10),
+                        ...state.matches.map(
+                          (match) => MatchCard(
+                            competitionName: match.competition.name,
+                            competitionLogo: match.competition.emblem,
+                            homeTeamName: match.homeTeam.name,
+                            homeTeamLogo: match.homeTeam.crest,
+                            homeTeamScore: match.score.fullTime.home.toString(),
+                            awayTeamName: match.awayTeam.name,
+                            awayTeamLogo: match.awayTeam.crest,
+                            awayTeamScore: match.score.fullTime.away.toString(),
+                            matchTime: getMatchState(
+                              match.status,
+                              match.utcDate,
                             ),
-                          )
-                          .toList(),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -114,14 +135,40 @@ class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
                         FluentIcons.settings,
                         size: 20,
                       ),
-                      onPressed: () => context.push('/settings'),
+                      onPressed: () => context.go('/settings'),
                     ),
                   ),
                 ),
               ],
             );
           } else if (state.status.isFailure) {
-            // return Center(child: Text(state.message));
+            return Stack(
+              children: [
+                Center(
+                  child: Text(
+                    'Error al cargar los partidos',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 7,
+                  child: SizedBox.square(
+                    dimension: 40,
+                    child: IconButton(
+                      icon: const Icon(
+                        FluentIcons.back,
+                        size: 20,
+                      ),
+                      onPressed: () => context.go('/home'),
+                    ),
+                  ),
+                ),
+              ],
+            );
           }
           return const SizedBox.shrink();
         },
@@ -204,7 +251,7 @@ class MatchCard extends StatelessWidget {
             child: Center(
               child: Opacity(
                 opacity: 0.1,
-                child: TeamLogo(
+                child: LeagueLogo(
                   logoUrl: competitionLogo,
                   height: double.infinity,
                   width: double.infinity,
@@ -396,6 +443,63 @@ class TeamLogo extends StatelessWidget {
             loadingProgress == null
                 ? child
                 : const Center(child: ProgressRing()),
+        errorBuilder: (context, error, stackTrace) => Center(
+          child: Icon(
+            FluentIcons.error,
+            color: Colors.red,
+            size: height * 0.57,
+          ),
+        ),
+        fit: fit,
+        height: height,
+        width: width,
+      );
+    }
+  }
+}
+
+class LeagueLogo extends StatelessWidget {
+  const LeagueLogo({
+    super.key,
+    required this.logoUrl,
+    required this.height,
+    required this.width,
+    required this.fit,
+  });
+
+  final String logoUrl;
+  final double height;
+  final double width;
+  final BoxFit fit;
+
+  @override
+  Widget build(BuildContext context) {
+    if (logoUrl.endsWith('.png')) {
+      final newLogo = logoUrl.endsWith('CL.png')
+          ? 'https://www.pbcc.com.co/wp-content/uploads/2016/12/uefa-champions-league.png'
+          : logoUrl;
+      final newBoxFit = logoUrl.endsWith('CL.png') ? BoxFit.cover : fit;
+      return Image.network(
+        newLogo,
+        errorBuilder: (context, error, stackTrace) => Center(
+          child: Icon(
+            FluentIcons.error,
+            color: Colors.red,
+            size: height * 0.57,
+          ),
+        ),
+        fit: newBoxFit,
+        height: height,
+        width: width,
+      );
+    } else {
+      final newUrl = logoUrl.endsWith('764.svg')
+          ? 'https://upload.wikimedia.org/wikipedia/pt/4/42/Campeonato_Brasileiro_S%C3%A9rie_A_logo.png'
+          : logoUrl.endsWith('SAM.svg')
+              ? 'https://logodownload.org/wp-content/uploads/2018/10/copa-libertadores-logo.png'
+              : 'https://upload.wikimedia.org/wikipedia/en/thumb/2/26/UEFA_Euro_2024_Logo.svg/1200px-UEFA_Euro_2024_Logo.svg.png';
+      return Image.network(
+        newUrl,
         errorBuilder: (context, error, stackTrace) => Center(
           child: Icon(
             FluentIcons.error,

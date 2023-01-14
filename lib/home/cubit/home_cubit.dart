@@ -1,21 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:local_repository/local_repository.dart';
 import 'package:match_api/match_api.dart';
 import 'package:match_repository/match_repository.dart';
 
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this._matchRepository) : super(const HomeState());
+  HomeCubit(this._localRepository, this._matchRepository)
+      : super(const HomeState());
 
+  final LocalRepository _localRepository;
   final MatchRepository _matchRepository;
 
   Future<void> initialMatchesLoading() async {
     emit(state.copyWith(status: HomeStatus.loading));
     try {
+      final enabledLeagues = _localRepository.getEnabledLeagues();
       final params = {
-        'competitions': 'CL,PL,PD,SA,FL1,BL1',
+        'competitions': enabledLeagues.join(','),
         'dateFrom': getDateFormatted(fromDate: true),
         'dateTo': getDateFormatted(fromDate: false),
       };
@@ -34,8 +38,9 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> updateMatches() async {
     try {
+      final enabledLeagues = _localRepository.getEnabledLeagues();
       final params = {
-        'competitions': 'CL,PL,PD,SA,FL1,BL1',
+        'competitions': enabledLeagues.join(','),
         'dateFrom': getDateFormatted(fromDate: true),
         'dateTo': getDateFormatted(fromDate: false),
       };

@@ -18,14 +18,40 @@ class SettingsCubit extends Cubit<SettingsState> {
     try {
       final leagues = await matchRepository.getAvailableLeagues();
       leagues.sort((a, b) => a.id.compareTo(b.id));
+
+      final leaguesEnabled = <String, bool>{
+        for (var league in leagues) league.code: false,
+      };
+
+      final localEnabledLeagues = localRepository.getEnabledLeagues();
+
+      for (final league in localEnabledLeagues) {
+        leaguesEnabled[league] = true;
+      }
+
       emit(
         state.copyWith(
           status: SettingsStatus.success,
           leagues: leagues,
+          leaguesEnabled: leaguesEnabled,
         ),
       );
     } catch (e) {
       emit(state.copyWith(status: SettingsStatus.failure));
     }
+  }
+
+  Future<void> saveLeague({
+    required String leagueCode,
+    required bool value,
+  }) async {
+    final leaguesEnabled = state.leaguesEnabled;
+    leaguesEnabled[leagueCode] = value;
+    emit(state.copyWith(leaguesEnabled: leaguesEnabled));
+
+    await localRepository.setEnabledLeague(
+      league: leagueCode,
+      value: value,
+    );
   }
 }

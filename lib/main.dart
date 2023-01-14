@@ -22,7 +22,7 @@ void main() async {
     titleBarStyle: TitleBarStyle.hidden,
     alwaysOnTop: true,
     minimumSize: Size(400, 216),
-    skipTaskbar: true,
+    // skipTaskbar: true,
   );
 
   // Establecer posición de la ventana
@@ -42,8 +42,8 @@ void main() async {
       headers: {
         'X-Auth-Token': '7fc3c7ecb0744a85b5cfe0c6e8e8dcd9',
       },
-      connectTimeout: 10000,
-      receiveTimeout: 10000,
+      connectTimeout: 5000,
+      receiveTimeout: 5000,
     ),
   );
 

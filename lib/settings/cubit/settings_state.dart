@@ -16,18 +16,22 @@ class SettingsState extends Equatable {
   const SettingsState({
     this.status = SettingsStatus.initial,
     this.leagues = const <League>[],
+    this.leaguesEnabled = const <String, bool>{},
   });
 
   final SettingsStatus status;
   final List<League> leagues;
+  final Map<String, bool> leaguesEnabled;
 
   SettingsState copyWith({
     SettingsStatus? status,
     List<League>? leagues,
+    Map<String, bool>? leaguesEnabled,
   }) {
     return SettingsState(
       status: status ?? this.status,
       leagues: leagues ?? this.leagues,
+      leaguesEnabled: leaguesEnabled ?? this.leaguesEnabled,
     );
   }
 
@@ -35,5 +39,6 @@ class SettingsState extends Equatable {
   List<Object?> get props => [
         status,
         leagues,
+        leaguesEnabled,
       ];
 }
