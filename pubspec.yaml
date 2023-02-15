@@ -34,7 +34,7 @@ dependencies:
   match_repository:
     path: packages/match_repository
   shared_preferences: ^2.0.15
-  window_manager: ^0.2.9
+  window_manager: ^0.3.0
 
 dev_dependencies:
   bloc_test: ^9.1.0
