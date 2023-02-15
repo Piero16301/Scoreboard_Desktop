@@ -15,7 +15,7 @@ Match _$MatchFromJson(Map<String, dynamic> json) {
     id: json['id'] as int,
     utcDate: DateTime.parse(json['utcDate'] as String).toLocal(),
     status: json['status'] as String,
-    matchday: json['matchday'] as int,
+    matchday: json['matchday'] as int? ?? 1,
     stage: json['stage'] as String,
     group: json['group'] as String? ?? '-',
     lastUpdated: DateTime.parse(json['lastUpdated'] as String)

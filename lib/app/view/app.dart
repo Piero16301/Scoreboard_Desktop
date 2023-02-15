@@ -32,7 +32,7 @@ class AppPage extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        theme: ThemeData.dark(),
+        theme: FluentThemeData.dark(),
         color: Colors.grey,
       ),
     );
