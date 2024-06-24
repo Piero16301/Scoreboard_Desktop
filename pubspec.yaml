@@ -8,7 +8,7 @@ environment:
   flutter: 3.3.8
 
 dependencies:
-  bloc: ^8.1.0
+  bloc: ^8.1.4
   dio: ^4.0.6
   equatable: ^2.0.5
   fluent_ui: ^4.1.3
